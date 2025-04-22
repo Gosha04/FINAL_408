@@ -78,12 +78,14 @@ CREATE TABLE rental (
     rentalID INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     startDate DATE NOT NULL,
     endDate DATE,
+    vehicleID INT NOT NULL,
     employeeID INT NOT NULL,
     customerID INT NOT NULL,
     dealershipID INT NOT NULL,
     FOREIGN KEY (employeeID) REFERENCES employee(employeeID),
     FOREIGN KEY (customerID) REFERENCES customer(customerID),
-    FOREIGN KEY (dealershipID) REFERENCES dealership(dealershipID)
+    FOREIGN KEY (dealershipID) REFERENCES dealership(dealershipID),
+    FOREIGN KEY (vehicleID) REFERENCES vehicle(vehicleID)
 );
 
 CREATE TABLE workOrder (
@@ -92,8 +94,10 @@ CREATE TABLE workOrder (
     active BOOLEAN NOT NULL DEFAULT TRUE,
     customerID INT NOT NULL,
     vehicleID INT NOT NULL,
+    dealershipID INT NOT NULL,
     FOREIGN KEY (customerID) REFERENCES customer(customerID),
-    FOREIGN KEY (vehicleID) REFERENCES vehicle(vehicleID)
+    FOREIGN KEY (vehicleID) REFERENCES vehicle(vehicleID),
+    FOREIGN KEY (dealershipID) REFERENCES dealership(dealershipID)
 );
 
 CREATE TABLE employeeWorkOrder (
@@ -110,5 +114,13 @@ CREATE TABLE city (
     countyID INT NOT NULL,
     FOREIGN KEY (countyID) REFERENCES county(countyID)
 );
+
+ALTER TABLE workOrder
+ADD COLUMN dealershipID INT NOT NULL;
+
+ALTER TABLE workOrder
+ADD FOREIGN KEY (dealershipID) REFERENCES dealership(dealershipID);
+
+
 
 
