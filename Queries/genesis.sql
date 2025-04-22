@@ -121,6 +121,11 @@ ADD COLUMN dealershipID INT NOT NULL;
 ALTER TABLE workOrder
 ADD FOREIGN KEY (dealershipID) REFERENCES dealership(dealershipID);
 
+ALTER TABLE sale
+ADD COLUMN vehicleID INT NOT NULL;
+
+ALTER TABLE sale
+ADD FOREIGN KEY (vehicleID) REFERENCES vehicle(vehicleID);
 
 
 
