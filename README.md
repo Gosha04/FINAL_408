@@ -6,6 +6,7 @@ Queries to be written:
 - Customer needs to be able to see their purchase records
 - Customer needs to be able to see their rental records 
 - Customer needs to be able to see open work orders for them
+- Create a view that has all address info all together (address, zip, city, county, state)
 
 For getting python proj on your own machine w dependencies:
 - Make sure you have `uv` installed
