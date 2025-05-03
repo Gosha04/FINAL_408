@@ -1,4 +1,4 @@
-CREATE SCHEMA dealership;
+USE dealership;
 
 CREATE TABLE employee (
     employeeID INT PRIMARY KEY AUTO_INCREMENT,
