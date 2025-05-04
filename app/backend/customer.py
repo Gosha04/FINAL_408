@@ -24,11 +24,24 @@ class Customer:
         self.addressID = addressID
 
     def findDealership(placeType, placeName): # placeType and placeName should be stripped
-        mycursor.execute("""SELECT Name FROM dealerShip
-                        INNER JOIN %s ON dealership %sID = %s %sID
-                        WHERE %sName = %s;""", (placeType, placeType, placeType, placeType, placeName))
+        mycursor.execute("""SELECT dealership.Name FROM dealerShip
+                        INNER JOIN %s ON %sID = %s %sID
+                        WHERE dealership.%sName = %s;""", (placeType, placeType, placeType, placeType, placeType, placeName))
         
-    # def findCarsAvailable():
+    def findCarsAvailable(dealerID):
+        mycursor.execute("SELECT * FROM vehicle WHERE dealershipID = %s;", (dealerID,))
+
+    def purchaseRecord(self):
+        mycursor.execute("""SELECT * FROM vehicle INNER JOIN sales ON customer.customerID = sales.customerID 
+                    INNER JOIN vehicle ON sales.vehicleID = vehicle.vehicleID WHERE customer.customerID = %s;""", (self.id,))
+
+    def rentalRecord(self):
+        mycursor.execute("""SELECT * FROM vehicle INNER JOIN rental ON customer.customerID = rental.customerID 
+                    INNER JOIN vehicle ON rental.vehicleID = vehicle.vehicleID WHERE customer.customerID = %s;""", (self.id,))
+        
+    def workOrderRecord(self):
+            mycursor.execute("SELECT * FROM workOrder WHERE customerID = %s;", (self.id,))
+
 
 
     
