@@ -42,6 +42,14 @@ class Customer:
     def workOrderRecord(self):
             mycursor.execute("SELECT * FROM workOrder WHERE customerID = %s;", (self.id,))
 
+    def viewAddressInfo(self):
+        mycursor.execute("""CREATE VIEW IF NOT EXISTS addressInfo AS
+                        SELECT address.streetAddress, city.cityName, county.countyName, state.stateName
+                        FROM address, city, county, state;""")
+        mydb.commit()
+        
+        mycursor.execute("SELECT * FROM addressInfo;")
+
 
 
     
