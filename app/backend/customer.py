@@ -23,6 +23,10 @@ class Customer:
         self.lastName = lastName
         self.addressID = addressID
 
+        mycursor.execute("INSERT INTO customer VALUES (%s, %s, %s);", (firstName, lastName, addressID))
+        mydb.commit()
+    
+
     def findDealership(placeType, placeName): # placeType and placeName should be stripped
         mycursor.execute("""SELECT dealership.Name FROM dealerShip
                         INNER JOIN %s ON %sID = %s %sID
@@ -49,6 +53,8 @@ class Customer:
         mydb.commit()
         
         mycursor.execute("SELECT * FROM addressInfo;")
+
+    
 
 
 
