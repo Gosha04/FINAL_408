@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from employee import employee
 
 load_dotenv()
 
@@ -17,13 +18,19 @@ mycursor = mydb.cursor()
 mycursor.execute("USE dealership")
 
 class Customer:
-    def __init__(self, id, firstName, lastName, addressID):
-        self.id = id
+    def __init__(self, id, firstName, lastName, addressID): # do existing customer logic
+        if id is not None:
+            self.id = id
+        else:
+            mycursor.execute("SELECT MAX(id) FROM customer")
+            result = mycursor.fetchone()
+            max_id = result[0] if result[0] is not None else -1 # Just in case, shouldn't need that last bit
+            self.id = max_id + 1
+
         self.firstName = firstName
         self.lastName = lastName
         self.addressID = addressID
-
-        mycursor.execute("INSERT INTO customer VALUES (%s, %s, %s);", (firstName, lastName, addressID))
+        mycursor.execute("INSERT INTO customer VALUES (%s, %s, %s, %s);", (self.id, firstName, lastName, addressID))
         mydb.commit()
     
 
@@ -53,6 +60,18 @@ class Customer:
         mydb.commit()
         
         mycursor.execute("SELECT * FROM addressInfo;")
+
+    def purchase(self, saleID,  vehicleID, amount, employee, date): # convert vehicleID to full on vehicle object   
+        mycursor.execute("UPDATE vehicle SET availible = 0 WHERE vehicleID = %s;",(vehicleID,))
+        mycursor.execute("INSERT INTO sale VALUES (%s, %s, %s, %s, %s) ;",
+                        (saleID, amount, date, employee.id, self.id, employee.dealerID, vehicleID))
+        mydb.commit()
+
+    def rent(self, rentalID,  vehicleID, amount, employee, date): # convert vehicleID to full on vehicle object 
+        mycursor.execute("UPDATE vehicle SET availible = 0 WHERE vehicleID = %s;",(vehicleID,))
+        mycursor.execute("INSERT INTO sale VALUES (%s, %s, %s, %s, %s) ;",
+                        (rentalID, amount, date, employee.id, self.id, employee.dealerID, vehicleID))
+        mydb.commit()
 
     
 
