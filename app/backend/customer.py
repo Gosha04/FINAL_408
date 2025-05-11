@@ -1,7 +1,6 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
-from employee import employee
 
 load_dotenv()
 
@@ -61,18 +60,21 @@ class Customer:
         
         mycursor.execute("SELECT * FROM addressInfo;")
 
-    def purchase(self, saleID,  vehicleID, amount, employee, date): # convert vehicleID to full on vehicle object   
+    def purchase(self, saleID,  vehicleID, amount, employeeID, date, employeeDealerID): # convert vehicleID to full on vehicle object   
         mycursor.execute("UPDATE vehicle SET availible = 0 WHERE vehicleID = %s;",(vehicleID,))
         mycursor.execute("INSERT INTO sale VALUES (%s, %s, %s, %s, %s) ;",
-                        (saleID, amount, date, employee.id, self.id, employee.dealerID, vehicleID))
+                        (saleID, amount, date, employeeID, self.id, employeeDealerID, vehicleID))
         mydb.commit()
 
-    def rent(self, rentalID,  vehicleID, amount, employee, date): # convert vehicleID to full on vehicle object 
+    def rent(self, rentalID,  vehicleID, amount, employeeID, employeeDealerID, date): # convert vehicleID to full on vehicle object 
         mycursor.execute("UPDATE vehicle SET availible = 0 WHERE vehicleID = %s;",(vehicleID,))
         mycursor.execute("INSERT INTO sale VALUES (%s, %s, %s, %s, %s) ;",
-                        (rentalID, amount, date, employee.id, self.id, employee.dealerID, vehicleID))
+                        (rentalID, amount, date, employeeID, self.id, employeeDealerID, vehicleID))
         mydb.commit()
 
+    def updateInfo(self, item, newValue):
+        mycursor.execute("UPDATE customer SET %s = %s WHERE customerID = %s;",(self.id, item, newValue))
+        mydb.commit()
     
 
 
