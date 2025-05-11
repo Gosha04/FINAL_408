@@ -320,19 +320,6 @@ CREATE TABLE `workOrder` (
 
 INSERT INTO `workOrder` VALUES (1,'2025-03-03',1,1,4,1),(2,'2025-03-03',1,2,5,1),(3,'2025-03-03',1,3,6,1);
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
---
--- View of dealerships with full addresses
---
-CREATE VIEW vDealershipAddresses AS
-SELECT dealershipID, address.streetAddress, city.cityName, county.countyName, state.stateName, address.ZIP
-FROM dealership
-INNER JOIN address ON dealership.addressID = address.addressID
-INNER JOIN city ON address.cityID = city.cityID
-INNER JOIN county ON city.countyID = county.countyID
-INNER JOIN state ON county.stateID = state.stateID;
-
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
