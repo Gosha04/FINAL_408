@@ -83,6 +83,23 @@ def main():
                         st.switch_page("pages/custHome.py")
                     else:
                         st.error(f"No customer with ID {user_id}.")
+                elif role == "Employee":
+                    if user_id == 1:
+                        st.session_state["user"] = {
+                            "id": user_id,
+                            "first_name": "John",
+                            "last_name": "Doe",
+                            "type": "Owner"
+                        }
+
+                        with st.spinner("Logging in..."):
+                            time.sleep(2)
+                        st.success("Signed in")
+
+                        time.sleep(0.5)
+
+                        if st.session_state["user"]["type"] == "Owner":
+                            st.switch_page("pages/ownerDash.py")
             except ValueError:
                 st.error("Please enter a valid ID.")
 

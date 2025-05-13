@@ -48,7 +48,7 @@ st.title(f"Welcome, {user["first_name"]} {user["last_name"]}!")
 
 st.write("")
 
-st.write(f"Your user id: {st.session_state["user"]["id"]}")
+st.write(f"Your customer id: {st.session_state["user"]["id"]}")
 
 sales_col, rentals_col, work_orders_col = st.columns(3, border = True)
 
