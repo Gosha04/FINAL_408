@@ -89,7 +89,8 @@ def main():
                             "id": user_id,
                             "first_name": "John",
                             "last_name": "Doe",
-                            "type": "Owner"
+                            "type": "Owner",
+                            "manager": 1
                         }
 
                         with st.spinner("Logging in..."):
@@ -139,8 +140,8 @@ def main():
         search_button = st.button("Search", disabled=search_disabled)
 
         if search_button and st.session_state.search_input:
-            temp_data = [("1", "1 University Drive", "Orange", "92868", "CA")]
-            cols = ["ID", "Address", "City", "Zip Code", "State"]
+            temp_data = [("1", "1 University Drive", "Orange", "92868", "Orange", "CA")]
+            cols = ["ID", "Address", "City", "Zip Code", "County", "State"]
             results_df = pd.DataFrame(temp_data, columns=cols)
 
             result = results_df[results_df[search_by] == st.session_state.search_input]
