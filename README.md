@@ -1,6 +1,6 @@
 # FINAL_408
 
-Queries to be written:
+<!-- Queries to be written:
 - Customer finding dealerships, needs to be able to see all dealerships, by city, county, and state
 - Customer needs to be able to see available vehicles at each dealership
 - Customer needs to be able to see their purchase records
@@ -19,4 +19,17 @@ For getting python proj on your own machine w dependencies:
 - find "Select Interpreter option"
 - Add existing interpreter
 - Go to folder where proj is, go to `.venv/bin/python3.13` and select it 
-- and then you should be good 
+- and then you should be good  -->
+
+I require in my Glorious Magnimosity:
+- We need all the classes to be linked to the front end to do stuff they want to do 
+    - There should be an aggregate button where an aggregate function is made for city/county/state
+    - Dealerships should be able to hold onto and operate all the objects they store
+        - They should be able to add, remove, etc.
+    - Employees ought to have functionality to be worked on by Dealership 
+    - Work Order should have work orders done, like you should be able to actually edit work orders 
+        - This may be done in employee
+        - SPEAKING OF SET WHAT OPERATIONS WHAT EMPLOYEE CAN DO
+            - Let techs tech, managers do HR, etc.
+
+            
