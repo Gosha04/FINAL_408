@@ -1,10 +1,19 @@
 import streamlit as st
 import pandas as pd
+import time
 
 def main():
     st.set_page_config(page_title = "Welcome!",
                        layout = "wide",
                        page_icon = "🚗")
+
+    st.markdown("""
+        <style>
+            [data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] {
+                display: none;
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
     st.markdown("""
             <style>
@@ -45,7 +54,12 @@ def main():
 
         login_disabled = not st.session_state.id_input
 
-        login_button = st.button("Log In", disabled=login_disabled)
+        col_login, col_create = st.columns(2)
+
+        login_button = col_login.button("Log In", disabled=login_disabled, use_container_width=True)
+
+        if role == "Customer":
+            create_button = col_create.button("Create New Account", use_container_width=True)
 
         if login_button and st.session_state.id_input:
             try:
@@ -60,9 +74,25 @@ def main():
                             "type": "Customer"
                         }
 
+                        with st.spinner("Logging in..."):
+                            time.sleep(2)
                         st.success("Signed in")
+
+                        time.sleep(0.5)
+
+                        st.switch_page("pages/custHome.py")
                     else:
-                        st.error(f"No customer with id {user_id}.")
+                        st.error(f"No customer with ID {user_id}.")
+            except ValueError:
+                st.error("Please enter a valid ID.")
+
+        if role == "Customer" and create_button and st.session_state.id_input:
+            try:
+                user_id = int(st.session_state.id_input)
+
+                # creation logic
+
+                st.success(f"Created account with id {user_id}")
             except ValueError:
                 st.error("Please enter a valid ID.")
 
@@ -92,8 +122,8 @@ def main():
         search_button = st.button("Search", disabled=search_disabled)
 
         if search_button and st.session_state.search_input:
-            temp_data = [("1 University Drive", "Orange", "92868", "CA")]
-            cols = ["Address", "City", "Zip Code", "State"]
+            temp_data = [("1", "1 University Drive", "Orange", "92868", "CA")]
+            cols = ["ID", "Address", "City", "Zip Code", "State"]
             results_df = pd.DataFrame(temp_data, columns=cols)
 
             result = results_df[results_df[search_by] == st.session_state.search_input]
