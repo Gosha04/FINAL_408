@@ -71,7 +71,7 @@ with dealerships:
     temp_dealer_df = pd.DataFrame(temp_dealers_data, columns=temp_dealer_data_cols)
 
     if filt == "All":
-        st.dataframe(temp_dealer_df)
+        st.dataframe(temp_dealer_df, hide_index=True)
     else:
         st.text_input(f"Enter a {filt}", key = "dealers_man_search_temp", on_change=update_dealers_man_search_in)
 
@@ -86,7 +86,7 @@ with dealerships:
 
         if search_button and st.session_state.dealers_man_search_in:
             if not result.empty:
-                st.dataframe(result)
+                st.dataframe(result, hide_index=True)
             else:
                 st.warning("No matching dealerships found.")
 

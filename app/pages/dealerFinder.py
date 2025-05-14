@@ -74,7 +74,7 @@ if search_button and st.session_state.search_input:
 
     result = results_df[results_df[search_by] == st.session_state.search_input]
     if not result.empty:
-        st.dataframe(result)
+        st.dataframe(result, hide_index=True)
     else:
         st.warning("No matching dealership found.")
 
@@ -94,6 +94,8 @@ dealer_search_disabled = not st.session_state.dealer_search_input
 dealer_search_button = st.button("See vehicles", disabled=dealer_search_disabled)
 
 if dealer_search_button and st.session_state.dealer_search_input:
+    # logic for getting available vehicles at dealership
+
     temp_vehicle_data = [("2022", "Subaru", "WRX", "2")]
     temp_vehicle_cols = ["Year", "Make", "Model", "Dealership ID"]
     veh_results_df = pd.DataFrame(temp_vehicle_data, columns=temp_vehicle_cols)
@@ -101,6 +103,6 @@ if dealer_search_button and st.session_state.dealer_search_input:
     veh_result = veh_results_df[veh_results_df["Dealership ID"] == st.session_state.dealer_search_input]
 
     if not veh_result.empty:
-        st.dataframe(veh_result.drop(columns="Dealership ID"))
+        st.dataframe(veh_result.drop(columns="Dealership ID"), hide_index=True)
     else:
         st.warning("No vehicles available at this dealership.")

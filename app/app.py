@@ -66,7 +66,7 @@ def main():
                 user_id = int(st.session_state.id_input)
 
                 if role == "Customer":
-                    if user_id == 1:
+                    if user_id == 1: # WILL BE REPLACED W DATA EXTRACTED FROM DB
                         st.session_state["user"] = {
                             "id": user_id,
                             "first_name": "John",
@@ -84,13 +84,14 @@ def main():
                     else:
                         st.error(f"No customer with ID {user_id}.")
                 elif role == "Employee":
-                    if user_id == 1:
+                    if user_id == 1: # all will be replaced with data extracted from DB
                         st.session_state["user"] = {
                             "id": user_id,
                             "first_name": "John",
                             "last_name": "Doe",
-                            "type": "Owner",
-                            "manager": 1
+                            "type": "Manager",
+                            "manager": 1,
+                            "dealershipID": 1
                         }
 
                         with st.spinner("Logging in..."):
@@ -101,6 +102,9 @@ def main():
 
                         if st.session_state["user"]["type"] == "Owner":
                             st.switch_page("pages/ownerDash.py")
+
+                        if st.session_state["user"]["type"] == "Manager":
+                            st.switch_page("pages/managerDash.py")
             except ValueError:
                 st.error("Please enter a valid ID.")
 
@@ -146,7 +150,7 @@ def main():
 
             result = results_df[results_df[search_by] == st.session_state.search_input]
             if not result.empty:
-                st.dataframe(result)
+                st.dataframe(result, hide_index=True)
             else:
                 st.warning("No matching dealership found.")
 

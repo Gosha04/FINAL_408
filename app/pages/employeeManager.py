@@ -71,7 +71,7 @@ with dealerships:
     temp_dealer_df = pd.DataFrame(temp_dealers_data, columns=temp_dealer_data_cols)
 
     if filt == "All":
-        st.dataframe(temp_dealer_df)
+        st.dataframe(temp_dealer_df, hide_index=True)
 
 
         # RENAME IN DOWNLOAD IF CHANGING DF NAME
@@ -91,7 +91,7 @@ with dealerships:
 
         if search_button and st.session_state.dealers_man_search_in:
             if not result.empty:
-                st.dataframe(result)
+                st.dataframe(result, hide_index=True)
 
                 # RENAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
                 st.download_button("Download CSV", data=result.to_csv().encode("utf-8"),
@@ -136,7 +136,7 @@ with see_employees:
             emp_results = emp_results.loc[emp_df["Role"] == "Manager"]
 
             if not emp_results.empty:
-                st.dataframe(emp_results)
+                st.dataframe(emp_results, hide_index=True)
 
                 # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
                 st.download_button("Download CSV", data=emp_results.to_csv().encode("utf-8"),
@@ -145,7 +145,7 @@ with see_employees:
                 st.warning("No employees found.")
         else:
             if not emp_results.empty:
-                st.dataframe(emp_results)
+                st.dataframe(emp_results, hide_index=True)
 
                 # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
                 st.download_button("Download CSV", data=emp_results.to_csv().encode("utf-8"),

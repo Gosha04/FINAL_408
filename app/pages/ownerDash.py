@@ -56,7 +56,12 @@ st.title(f"Welcome, {user["first_name"]} {user["last_name"]}!")
 
 st.write("")
 
-st.write(f"Your employee id: {st.session_state["user"]["id"]}, Role: {st.session_state["user"]["type"]}")
+usr_id_col, role_col = st.columns([1, 4])
+with usr_id_col:
+    st.write(f"Your Employee ID: {st.session_state["user"]["id"]}")
+
+with role_col:
+    st.write(f"Role: {st.session_state["user"]["type"]}")
 
 dealerships = st.container(border = True)
 
@@ -67,7 +72,7 @@ with dealerships:
     cols = ["ID", "Address", "City", "Zip Code", "State"]
     results_df = pd.DataFrame(temp_data, columns=cols)
 
-    st.dataframe(results_df)
+    st.dataframe(results_df, hide_index=True)
 
     # RENAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
     st.download_button("Download CSV", data = results_df.to_csv().encode("utf-8"), file_name = "dealerships.csv", icon = ":material/download:")
@@ -128,6 +133,6 @@ with employees_col:
 
             results_df = pd.DataFrame(temp_emp_data, columns=temp_emp_cols)
 
-            st.dataframe(results_df)
+            st.dataframe(results_df, hide_index=True)
         else:
             st.warning("No matching dealership found")

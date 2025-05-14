@@ -74,7 +74,7 @@ with global_sales:
 
         cities_sales_df_temp = pd.DataFrame(cities_sales_data_temp, columns = cities_sales_data_cols)
 
-        st.dataframe(cities_sales_df_temp)
+        st.dataframe(cities_sales_df_temp, hide_index=True)
 
         # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
         st.download_button("Download CSV", data=cities_sales_df_temp.to_csv().encode("utf-8"),
@@ -86,7 +86,7 @@ with global_sales:
 
         counties_sales_df_temp = pd.DataFrame(counties_sales_data_temp, columns = counties_sales_data_cols)
 
-        st.dataframe(counties_sales_df_temp)
+        st.dataframe(counties_sales_df_temp, hide_index=True)
 
         # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
         st.download_button("Download CSV", data=counties_sales_df_temp.to_csv().encode("utf-8"),
@@ -98,7 +98,7 @@ with global_sales:
 
         states_sales_df_temp = pd.DataFrame(states_sales_data_temp, columns = states_sales_data_cols)
 
-        st.dataframe(states_sales_df_temp)
+        st.dataframe(states_sales_df_temp, hide_index=True)
 
         # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
         st.download_button("Download CSV", data=states_sales_df_temp.to_csv().encode("utf-8"),
@@ -121,7 +121,7 @@ with dealership_sales:
     temp_dealer_df_sales = pd.DataFrame(temp_dealers_data, columns=temp_dealer_data_cols)
 
     if filt == "All":
-        st.dataframe(temp_dealer_df_sales)
+        st.dataframe(temp_dealer_df_sales, hide_index=True)
 
         # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
         st.download_button("Download CSV", data=temp_dealer_df_sales.to_csv().encode("utf-8"),
@@ -140,7 +140,7 @@ with dealership_sales:
 
         if search_button and st.session_state.dealers_man_search_in:
             if not result.empty:
-                st.dataframe(result)
+                st.dataframe(result, hide_index=True)
 
                 # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
                 st.download_button("Download CSV", data=result.to_csv().encode("utf-8"),
