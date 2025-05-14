@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title = "Dealership Manager", page_icon = "⚙️", layout = "wide")
+st.set_page_config(page_title = "Employee Manager", page_icon = "️👷‍♂️", layout = "wide")
 
 st.markdown("""
     <style>
@@ -49,7 +49,7 @@ st.markdown("""
                 </style>
         """, unsafe_allow_html=True)
 
-st.title(f"Welcome, {user['first_name']}. Manage your Dealerships here!")
+st.title(f"Welcome, {user['first_name']}. Manage your Employees here!")
 
 dealerships = st.container(border = True)
 
@@ -87,64 +87,48 @@ with dealerships:
             else:
                 st.warning("No matching dealerships found.")
 
-create_dealership = st.container(border = True)
+see_employees, manage_managers = st.columns(2, border = True)
 
-with create_dealership:
-    st.subheader("Add a Dealership", divider = "gray")
+with see_employees:
+    st.subheader("See Employees", divider = "gray")
 
-    street_address = st.text_input("Enter street address")
+    def update_employees_man_search_in():
+        st.session_state.employees_man_search_in = st.session_state.employees_man_search_temp
 
-    # get all states
-    states_temp = ["CA", "WI", "TX", "OR", "NY", "Enter a new state"] # ... ... ... etc
-    state = st.selectbox("Select State", states_temp)
+    st.text_input("Enter a Dealership ID", key = "employees_man_search_temp", on_change=update_employees_man_search_in)
 
-    new_state, new_county, new_city = False, False, False
+    if "employees_man_search_in" not in st.session_state:
+        st.session_state.employees_man_search_in = ""
 
-    if state == "Enter a new state":
-        state = st.text_input("Enter a new state (abbreviation only)", max_chars = 2)
-        county = st.text_input("Enter a new county")
-        city = st.text_input("Enter a new city")
+    emp_search_disabled = not st.session_state.employees_man_search_in
 
-        new_state, new_county, new_city = True, True, True
-    else:
-        # get all counties in that state
-        counties_temp = ["One", "Two", "Three", "Four", "Five", "Enter a new county"]
-        county = st.selectbox("Select County", counties_temp)
+    button, toggle = st.columns([1,2.5], border = False)
 
-        if county == "Enter a new county":
-            county = st.text_input("Enter a new county")
-            city = st.text_input("Enter a new city")
+    with button:
+        emp_search_button = st.button(f"See Employees", disabled=emp_search_disabled)
 
-            new_county, new_city = True, True
+    with toggle:
+        managers_only = st.toggle("Managers only")
+
+    if emp_search_button and st.session_state.employees_man_search_in:
+        temp_emps = [(1, 1, "Jane", "Skort", "Manager", 10), (2,1,"Kor", "Man", "Tech", 10), (2, 2, "Poer", "Klop", "Salesperson", 10)]
+        temp_emp_cols = ["ID", "Dealership ID", "First Name", "Last Name", "Role", "Supervisor ID"]
+
+        emp_df = pd.DataFrame(temp_emps, columns=temp_emp_cols)
+
+        emp_results = emp_df.loc[emp_df["Dealership ID"] == int(st.session_state.employees_man_search_in)]
+
+        emp_results = emp_results.drop("Dealership ID", axis = 1)
+
+        if managers_only:
+            emp_results = emp_results.loc[emp_df["Role"] == "Manager"]
+
+            if not emp_results.empty:
+                st.dataframe(emp_results)
+            else:
+                st.warning("No employees found.")
         else:
-            # get all cities in that county
-            cities_temp = ["Six", "Seven", "Eight", "Nine", "Enter a new city"]
-            city = st.selectbox("Select City", cities_temp)
-
-            if city == "Enter a new city":
-                city = st.text_input("Enter a new city")
-
-                new_city = True
-
-    create_button_disabled = not (state and city and county and street_address)
-
-    create_dealership = st.button("Create Dealership", disabled=create_button_disabled)
-
-    if create_dealership:
-        if new_state:
-            # state creation logic
-            pass
-
-        if new_county:
-            # county creation logic
-            pass
-
-        if new_city:
-            # city creation logic
-            pass
-
-        # address creation logic
-
-        # dealership creation logic
-
-        # IMPORTANT THAT IN THIS ORDER FOR DB LOGIC (OR USE A TRANSACTION IDK)
+            if not emp_results.empty:
+                st.dataframe(emp_results)
+            else:
+                st.warning("No matching employees found.")
