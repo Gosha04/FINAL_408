@@ -132,3 +132,48 @@ with see_employees:
                 st.dataframe(emp_results)
             else:
                 st.warning("No matching employees found.")
+
+with manage_managers:
+    st.subheader("Manage Managers", divider = "gray")
+
+    choice = st.pills("Would you like to", options = ["Hire", "Fire", "Transfer"], default = "Hire")
+
+    if choice == "Hire":
+        new_mngr_id = st.text_input("Enter Dealership for New Manager")
+        new_mngr_first = st.text_input("Enter First Name for New Manager")
+        new_mngr_last = st.text_input("Enter Last Name for New Manager")
+
+        # supervisor id will be 1 (owner id)
+        # role will be hard coded as manager
+
+        hire_button_disabled = not (new_mngr_id and new_mngr_first and new_mngr_last)
+
+        hire_button = st.button("Hire", disabled=hire_button_disabled)
+
+        if hire_button:
+            st.success("Hired")
+            # new manager (employee) creation logic
+    elif choice == "Fire":
+        to_fire_id = st.text_input("Enter Manager ID to be Fired")
+
+        fire_button_disabled = not to_fire_id
+
+        fire_button = st.button("Fire", disabled=fire_button_disabled)
+
+        if fire_button:
+            st.success("Fired")
+            # manager deletion logic
+            # need logic to ensure manager exists
+    elif choice == "Transfer":
+        to_transfer_mngr_id = st.text_input("Enter ID of Manager to be Transferred")
+        new_dealership_id = st.text_input("Enter New Dealership ID for Manager")
+
+        transfer_button_disabled = not (to_transfer_mngr_id and new_dealership_id)
+
+        transfer_button = st.button("Transfer", disabled=transfer_button_disabled)
+
+        if transfer_button:
+            st.success("Transferred")
+            # logic for moving a manager to a new dealership
+            # includes changing all the people they manage to a different manager at that dealership if applicable
+            # need logic to ensure manager and target dealership exist
