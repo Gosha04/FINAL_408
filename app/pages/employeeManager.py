@@ -36,6 +36,9 @@ with st.sidebar:
     if st.button("Manage Employees"):
         st.switch_page("pages/employeeManager.py")
 
+    if st.button("Sales Dashboard"):
+        st.switch_page("pages/salesDashboard.py")
+
 
 st.markdown("""
             <style>
@@ -69,6 +72,11 @@ with dealerships:
 
     if filt == "All":
         st.dataframe(temp_dealer_df)
+
+
+        # RENAME IN DOWNLOAD IF CHANGING DF NAME
+        st.download_button("Download CSV", data=temp_dealer_df.to_csv().encode("utf-8"),
+                           file_name="dealerships.csv", icon=":material/download:")
     else:
         st.text_input(f"Enter a {filt}", key = "dealers_man_search_temp", on_change=update_dealers_man_search_in)
 
@@ -84,6 +92,10 @@ with dealerships:
         if search_button and st.session_state.dealers_man_search_in:
             if not result.empty:
                 st.dataframe(result)
+
+                # RENAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
+                st.download_button("Download CSV", data=result.to_csv().encode("utf-8"),
+                                   file_name="dealerships.csv", icon=":material/download:")
             else:
                 st.warning("No matching dealerships found.")
 
@@ -125,11 +137,19 @@ with see_employees:
 
             if not emp_results.empty:
                 st.dataframe(emp_results)
+
+                # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
+                st.download_button("Download CSV", data=emp_results.to_csv().encode("utf-8"),
+                                   file_name="managers.csv", icon=":material/download:")
             else:
                 st.warning("No employees found.")
         else:
             if not emp_results.empty:
                 st.dataframe(emp_results)
+
+                # CHANGE NAME IN DOWNLOAD IF CHANGING DF NAME
+                st.download_button("Download CSV", data=emp_results.to_csv().encode("utf-8"),
+                                   file_name="employees.csv", icon=":material/download:")
             else:
                 st.warning("No matching employees found.")
 

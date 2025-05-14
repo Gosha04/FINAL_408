@@ -36,6 +36,9 @@ with st.sidebar:
     if st.button("Manage Employees"):
         st.switch_page("pages/employeeManager.py")
 
+    if st.button("Sales Dashboard"):
+        st.switch_page("pages/salesDashboard.py")
+
 
 st.markdown("""
             <style>
@@ -65,6 +68,9 @@ with dealerships:
     results_df = pd.DataFrame(temp_data, columns=cols)
 
     st.dataframe(results_df)
+
+    # RENAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
+    st.download_button("Download CSV", data = results_df.to_csv().encode("utf-8"), file_name = "dealerships.csv", icon = ":material/download:")
 
 sales_col, employees_col = st.columns(2, border = True)
 

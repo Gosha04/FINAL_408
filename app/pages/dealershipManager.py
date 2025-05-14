@@ -36,6 +36,9 @@ with st.sidebar:
     if st.button("Manage Employees"):
         st.switch_page("pages/employeeManager.py")
 
+    if st.button("Sales Dashboard"):
+        st.switch_page("pages/salesDashboard.py")
+
 
 st.markdown("""
             <style>
