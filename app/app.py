@@ -89,7 +89,7 @@ def main():
                             "id": user_id,
                             "first_name": "John",
                             "last_name": "Doe",
-                            "type": "Technician",
+                            "type": "Trainee",
                             "manager": 1,
                             "dealershipID": 1
                         }
@@ -111,6 +111,9 @@ def main():
 
                         if st.session_state["user"]["type"] == "Technician":
                             st.switch_page("pages/technicianDash.py")
+
+                        if st.session_state["user"]["type"] == "Trainee":
+                            st.switch_page("pages/traineeDash.py")
             except ValueError:
                 st.error("Please enter a valid ID.")
 

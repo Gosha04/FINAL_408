@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title = "Manage Work Orders", page_icon = "⚙️", layout = "wide")
+st.set_page_config(page_title = "Manage Work Orders", page_icon = "🧰", layout = "wide")
 
 st.markdown("""
     <style>
