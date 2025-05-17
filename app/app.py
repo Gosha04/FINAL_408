@@ -105,6 +105,9 @@ def main():
 
                         if st.session_state["user"]["type"] == "Manager":
                             st.switch_page("pages/managerDash.py")
+
+                        if st.session_state["user"]["type"] == "Salesperson":
+                            st.switch_page("pages/salespersonDash.py")
             except ValueError:
                 st.error("Please enter a valid ID.")
 

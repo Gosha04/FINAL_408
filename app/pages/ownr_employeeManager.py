@@ -31,13 +31,13 @@ with st.sidebar:
         st.switch_page("pages/ownerDash.py")
 
     if st.button("Manage Dealerships"):
-        st.switch_page("pages/dealershipManager.py")
+        st.switch_page("pages/ownr_dealershipManager.py")
 
     if st.button("Manage Employees"):
-        st.switch_page("pages/employeeManager.py")
+        st.switch_page("pages/ownr_employeeManager.py")
 
     if st.button("Sales Dashboard"):
-        st.switch_page("pages/salesDashboard.py")
+        st.switch_page("pages/ownr_salesDashboard.py")
 
 
 st.markdown("""
@@ -70,34 +70,37 @@ with dealerships:
 
     temp_dealer_df = pd.DataFrame(temp_dealers_data, columns=temp_dealer_data_cols)
 
-    if filt == "All":
-        st.dataframe(temp_dealer_df, hide_index=True)
-
-
-        # RENAME IN DOWNLOAD IF CHANGING DF NAME
-        st.download_button("Download CSV", data=temp_dealer_df.to_csv().encode("utf-8"),
-                           file_name="dealerships.csv", icon=":material/download:")
+    if not filt:
+        st.error("Select a search term!")
     else:
-        st.text_input(f"Enter a {filt}", key = "dealers_man_search_temp", on_change=update_dealers_man_search_in)
+        if filt == "All":
+            st.dataframe(temp_dealer_df, hide_index=True)
 
-        if "dealers_man_search_in" not in st.session_state:
-            st.session_state.dealers_man_search_in = ""
 
-        search_disabled = not st.session_state.dealers_man_search_in
+            # RENAME IN DOWNLOAD IF CHANGING DF NAME
+            st.download_button("Download CSV", data=temp_dealer_df.to_csv().encode("utf-8"),
+                           file_name="dealerships.csv", icon=":material/download:")
+        else:
+            st.text_input(f"Enter a {filt}", key = "dealers_man_search_temp", on_change=update_dealers_man_search_in)
 
-        search_button = st.button(f"See Dealerships", disabled=search_disabled)
+            if "dealers_man_search_in" not in st.session_state:
+                st.session_state.dealers_man_search_in = ""
 
-        result = temp_dealer_df.loc[temp_dealer_df[filt] == st.session_state.dealers_man_search_in]
+            search_disabled = not st.session_state.dealers_man_search_in
 
-        if search_button and st.session_state.dealers_man_search_in:
-            if not result.empty:
-                st.dataframe(result, hide_index=True)
+            search_button = st.button(f"See Dealerships", disabled=search_disabled)
 
-                # RENAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
-                st.download_button("Download CSV", data=result.to_csv().encode("utf-8"),
+            result = temp_dealer_df.loc[temp_dealer_df[filt] == st.session_state.dealers_man_search_in]
+
+            if search_button and st.session_state.dealers_man_search_in:
+                if not result.empty:
+                    st.dataframe(result, hide_index=True)
+
+                    # RENAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
+                    st.download_button("Download CSV", data=result.to_csv().encode("utf-8"),
                                    file_name="dealerships.csv", icon=":material/download:")
-            else:
-                st.warning("No matching dealerships found.")
+                else:
+                    st.warning("No matching dealerships found.")
 
 see_employees, manage_managers = st.columns(2, border = True)
 
@@ -112,7 +115,14 @@ with see_employees:
     if "employees_man_search_in" not in st.session_state:
         st.session_state.employees_man_search_in = ""
 
-    emp_search_disabled = not st.session_state.employees_man_search_in
+    try:
+        st.session_state.employees_man_search_in = int(st.session_state.employees_man_search_in)
+        number_check = False
+    except ValueError:
+        st.error("Enter a number!")
+        number_check = True
+
+    emp_search_disabled = not (st.session_state.employees_man_search_in and not number_check)
 
     button, toggle = st.columns([1,2.5], border = False)
 
@@ -151,49 +161,56 @@ with see_employees:
                 st.download_button("Download CSV", data=emp_results.to_csv().encode("utf-8"),
                                    file_name="employees.csv", icon=":material/download:")
             else:
-                st.warning("No matching employees found.")
+                st.warning("No matching dealership found.")
 
 with manage_managers:
     st.subheader("Manage Managers", divider = "gray")
 
     choice = st.pills("Would you like to", options = ["Hire", "Fire", "Transfer"], default = "Hire")
 
-    if choice == "Hire":
-        new_mngr_id = st.text_input("Enter Dealership for New Manager")
-        new_mngr_first = st.text_input("Enter First Name for New Manager")
-        new_mngr_last = st.text_input("Enter Last Name for New Manager")
+    if not choice:
+        st.error("Enter an option!")
+    else:
+        if choice == "Hire":
+            new_mngr_id = st.text_input("Enter Dealership for New Manager")
+            new_mngr_first = st.text_input("Enter First Name for New Manager")
+            new_mngr_last = st.text_input("Enter Last Name for New Manager")
 
-        # supervisor id will be 1 (owner id)
-        # role will be hard coded as manager
+            # supervisor id will be 1 (owner id)
+            # role will be hard coded as manager
 
-        hire_button_disabled = not (new_mngr_id and new_mngr_first and new_mngr_last)
+            hire_button_disabled = not (new_mngr_id and new_mngr_first and new_mngr_last)
 
-        hire_button = st.button("Hire", disabled=hire_button_disabled)
+            hire_button = st.button("Hire", disabled=hire_button_disabled)
 
-        if hire_button:
-            st.success("Hired")
-            # new manager (employee) creation logic
-    elif choice == "Fire":
-        to_fire_id = st.text_input("Enter Manager ID to be Fired")
+            if hire_button:
+                st.success("Hired")
+                # new manager (employee) creation logic
+        elif choice == "Fire":
+            to_fire_id = st.text_input("Enter Manager ID to be Fired")
 
-        fire_button_disabled = not to_fire_id
+            # NEED TO SOMEHOW CHECK IF DESIRED MANAGER TO FIRE EXISTS (no way to simulate in good way with test data)
 
-        fire_button = st.button("Fire", disabled=fire_button_disabled)
+            fire_button_disabled = not to_fire_id
 
-        if fire_button:
-            st.success("Fired")
-            # manager deletion logic
-            # need logic to ensure manager exists
-    elif choice == "Transfer":
-        to_transfer_mngr_id = st.text_input("Enter ID of Manager to be Transferred")
-        new_dealership_id = st.text_input("Enter New Dealership ID for Manager")
+            fire_button = st.button("Fire", disabled=fire_button_disabled)
 
-        transfer_button_disabled = not (to_transfer_mngr_id and new_dealership_id)
+            if fire_button:
+                st.success("Fired")
+                # manager deletion logic
+                # need logic to ensure manager exists
+        elif choice == "Transfer":
+            to_transfer_mngr_id = st.text_input("Enter ID of Manager to be Transferred")
+            new_dealership_id = st.text_input("Enter New Dealership ID for Manager")
 
-        transfer_button = st.button("Transfer", disabled=transfer_button_disabled)
+            # NEED EXISTENCE CHECKS FOR BOTH MANAGER AND NEW DEALERSHIP
 
-        if transfer_button:
-            st.success("Transferred")
-            # logic for moving a manager to a new dealership
-            # includes changing all the people they manage to a different manager at that dealership if applicable
-            # need logic to ensure manager and target dealership exist
+            transfer_button_disabled = not (to_transfer_mngr_id and new_dealership_id)
+
+            transfer_button = st.button("Transfer", disabled=transfer_button_disabled)
+
+            if transfer_button:
+                st.success("Transferred")
+                # logic for moving a manager to a new dealership
+                # includes changing all the people they manage to a different manager at that dealership if applicable
+                # need logic to ensure manager and target dealership exist

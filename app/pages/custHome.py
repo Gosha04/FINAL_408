@@ -31,7 +31,7 @@ with st.sidebar:
         st.switch_page("pages/custHome.py")
 
     if st.button("Find a Dealer"):
-        st.switch_page("pages/dealerFinder.py")
+        st.switch_page("pages/cstmr_dealerFinder.py")
 
 st.markdown("""
             <style>

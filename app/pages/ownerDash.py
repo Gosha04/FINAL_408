@@ -31,13 +31,13 @@ with st.sidebar:
         st.switch_page("pages/ownerDash.py")
 
     if st.button("Manage Dealerships"):
-        st.switch_page("pages/dealershipManager.py")
+        st.switch_page("pages/ownr_dealershipManager.py")
 
     if st.button("Manage Employees"):
-        st.switch_page("pages/employeeManager.py")
+        st.switch_page("pages/ownr_employeeManager.py")
 
     if st.button("Sales Dashboard"):
-        st.switch_page("pages/salesDashboard.py")
+        st.switch_page("pages/ownr_salesDashboard.py")
 
 
 st.markdown("""

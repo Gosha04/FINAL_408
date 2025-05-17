@@ -29,7 +29,7 @@ with st.sidebar:
         st.switch_page("pages/custHome.py")
 
     if st.button("Find a Dealer"):
-        st.switch_page("pages/dealerFinder.py")
+        st.switch_page("pages/cstmr_dealerFinder.py")
 
 st.markdown("""
             <style>
@@ -96,8 +96,8 @@ dealer_search_button = st.button("See vehicles", disabled=dealer_search_disabled
 if dealer_search_button and st.session_state.dealer_search_input:
     # logic for getting available vehicles at dealership
 
-    temp_vehicle_data = [("2022", "Subaru", "WRX", "2")]
-    temp_vehicle_cols = ["Year", "Make", "Model", "Dealership ID"]
+    temp_vehicle_data = [("2022", "Subaru", "WRX", "2", 20000, 49)]
+    temp_vehicle_cols = ["Year", "Make", "Model", "Dealership ID", "Sale Price", "Rental Rate"]
     veh_results_df = pd.DataFrame(temp_vehicle_data, columns=temp_vehicle_cols)
 
     veh_result = veh_results_df[veh_results_df["Dealership ID"] == st.session_state.dealer_search_input]

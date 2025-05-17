@@ -31,13 +31,13 @@ with st.sidebar:
         st.switch_page("pages/ownerDash.py")
 
     if st.button("Manage Dealerships"):
-        st.switch_page("pages/dealershipManager.py")
+        st.switch_page("pages/ownr_dealershipManager.py")
 
     if st.button("Manage Employees"):
-        st.switch_page("pages/employeeManager.py")
+        st.switch_page("pages/ownr_employeeManager.py")
 
     if st.button("Sales Dashboard"):
-        st.switch_page("pages/salesDashboard.py")
+        st.switch_page("pages/ownr_salesDashboard.py")
 
 
 st.markdown("""
@@ -64,33 +64,39 @@ with dealerships:
 
     filt = st.pills("See Dealerships by", options = ["All", "City", "County", "State"], selection_mode = "single", default = "All")
 
-    # have to load all dealerships into a dataframe here
-    temp_dealers_data = [(1, "1 University Drive", "Orange", "92868", "Orange", "CA"), (2, "1 test test", "Skibidi", "99999", "Texarkana", "CA"), (3, "2 testing testing", "Green Bay", "66666", "Point", "WI")]
-    temp_dealer_data_cols = ["ID", "Address", "City", "Zip Code", "County", "State"]
-
-    temp_dealer_df = pd.DataFrame(temp_dealers_data, columns=temp_dealer_data_cols)
-
-    if filt == "All":
-        st.dataframe(temp_dealer_df, hide_index=True)
+    if not filt:
+        st.error("Select a search term!")
     else:
-        st.text_input(f"Enter a {filt}", key = "dealers_man_search_temp", on_change=update_dealers_man_search_in)
+        # have to load all dealerships into a dataframe here
+        temp_dealers_data = [(1, "1 University Drive", "Orange", "92868", "Orange", "CA"), (2, "1 test test", "Skibidi", "99999", "Texarkana", "CA"), (3, "2 testing testing", "Green Bay", "66666", "Point", "WI")]
+        temp_dealer_data_cols = ["Dealership ID", "Address", "City", "Zip Code", "County", "State"]
 
-        if "dealers_man_search_in" not in st.session_state:
-            st.session_state.dealers_man_search_in = ""
+        temp_dealer_df = pd.DataFrame(temp_dealers_data, columns=temp_dealer_data_cols)
 
-        search_disabled = not st.session_state.dealers_man_search_in
+        if filt == "All":
+            st.dataframe(temp_dealer_df, hide_index=True)
+            st.download_button("Download CSV", file_name = "dealerships.csv", data = temp_dealer_df.to_csv().encode("utf-8"), icon = ":material/download:")
+        else:
+            st.text_input(f"Enter a {filt}", key = "dealers_man_search_temp", on_change=update_dealers_man_search_in)
 
-        search_button = st.button(f"See Dealerships", disabled=search_disabled)
+            if "dealers_man_search_in" not in st.session_state:
+                st.session_state.dealers_man_search_in = ""
 
-        result = temp_dealer_df.loc[temp_dealer_df[filt] == st.session_state.dealers_man_search_in]
+            search_disabled = not st.session_state.dealers_man_search_in
 
-        if search_button and st.session_state.dealers_man_search_in:
-            if not result.empty:
-                st.dataframe(result, hide_index=True)
-            else:
-                st.warning("No matching dealerships found.")
+            search_button = st.button(f"See Dealerships", disabled=search_disabled)
 
-create_dealership = st.container(border = True)
+            result = temp_dealer_df.loc[temp_dealer_df[filt] == st.session_state.dealers_man_search_in]
+
+            if search_button and st.session_state.dealers_man_search_in:
+                if not result.empty:
+                    st.dataframe(result, hide_index=True)
+                    st.download_button("Download CSV", file_name="dealerships.csv",
+                                       data=temp_dealer_df.to_csv().encode("utf-8"), icon=":material/download:")
+                else:
+                    st.warning("No matching dealerships found.")
+
+create_dealership, delete_dealership = st.columns(2, border = True)
 
 with create_dealership:
     st.subheader("Add a Dealership", divider = "gray")
@@ -151,3 +157,26 @@ with create_dealership:
         # dealership creation logic
 
         # IMPORTANT THAT IN THIS ORDER FOR DB LOGIC (OR USE A TRANSACTION IDK)
+
+with delete_dealership:
+    st.subheader("Delete Dealership", divider = "gray")
+
+    to_delete = st.text_input("Enter Dealership ID to Delete")
+
+    delete_button_disabled = True
+
+    if to_delete:
+        try:
+            to_delete = int(to_delete)
+
+            if to_delete in temp_dealer_df["Dealership ID"].values:
+                delete_button_disabled = False
+            else:
+                delete_button_disabled = True
+                st.warning("No Dealership Found")
+        except ValueError:
+            st.error("Enter a number!")
+
+    if st.button("Delete Dealership", disabled=delete_button_disabled):
+        st.success("Dealership Deleted")
+        # delearship deletion logic

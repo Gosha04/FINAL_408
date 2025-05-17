@@ -30,7 +30,17 @@ with st.sidebar:
     if st.button("Dashboard"):
         st.switch_page("pages/managerDash.py")
 
+    if st.button("Manage Employees"):
+        st.switch_page("pages/mngr_employeeManager.py")
 
+    if st.button("Manage Vehicles"):
+        st.switch_page("pages/mngr_vehicleManager.py")
+
+    if st.button("See Work Orders"):
+        st.switch_page("pages/mngr_workOrders.py")
+
+    if st.button("Manage Customers"):
+        st.switch_page("pages/mngr_customerManager.py")
 
 st.markdown("""
             <style>
@@ -72,17 +82,20 @@ with employees:
 
     emp_filt = st.pills("See Employees by Role", options = ["All", "Manager", "Salesperson", "Technician", "Trainee"], selection_mode = "single", default = "All")
 
-    if emp_filt == "All":
-        st.dataframe(temp_employees_df, hide_index=True)
-
-        st.download_button("Download CSV", data = temp_employees_df.to_csv().encode("utf-8"), file_name = "employees.csv", icon = ":material/download:")
+    if not emp_filt:
+        st.error("Select a search term!")
     else:
-        temp_employees_df = temp_employees_df.loc[temp_employees_df["Role"] == emp_filt]
+        if emp_filt == "All":
+            st.dataframe(temp_employees_df, hide_index=True)
 
-        st.dataframe(temp_employees_df, hide_index = True)
+            st.download_button("Download CSV", data = temp_employees_df.to_csv().encode("utf-8"), file_name = "employees.csv", icon = ":material/download:")
+        else:
+            temp_employees_df = temp_employees_df.loc[temp_employees_df["Role"] == emp_filt]
 
-        # CHANGE DF NAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
-        st.download_button("Download CSV", data=temp_employees_df.to_csv().encode("utf-8"), file_name="employees.csv",
+            st.dataframe(temp_employees_df, hide_index = True)
+
+            # CHANGE DF NAME IN DOWNLOAD BUTTON IF CHANGING DF NAME
+            st.download_button("Download CSV", data=temp_employees_df.to_csv().encode("utf-8"), file_name="employees.csv",
                            icon=":material/download:")
 
 sales, vehicles = st.columns(2, border = True)
@@ -119,3 +132,5 @@ with vehicles:
     temp_vehicle_data_df = pd.DataFrame(temp_vehicle_data, columns = temp_vehicle_data_cols)
 
     st.dataframe(temp_vehicle_data_df, hide_index = True)
+
+    st.download_button("Download CSV", data=temp_vehicle_data_df.to_csv().encode("utf-8"), file_name="vehicles.csv", icon = ":material/download:")
