@@ -66,7 +66,7 @@ def main():
                 user_id = int(st.session_state.id_input)
 
                 if role == "Customer":
-                    if user_id == 1:
+                    if user_id == 1: # WILL BE REPLACED W DATA EXTRACTED FROM DB
                         st.session_state["user"] = {
                             "id": user_id,
                             "first_name": "John",
@@ -83,6 +83,37 @@ def main():
                         st.switch_page("pages/custHome.py")
                     else:
                         st.error(f"No customer with ID {user_id}.")
+                elif role == "Employee":
+                    if user_id == 1: # all will be replaced with data extracted from DB
+                        st.session_state["user"] = {
+                            "id": user_id,
+                            "first_name": "John",
+                            "last_name": "Doe",
+                            "type": "Trainee",
+                            "manager": 1,
+                            "dealershipID": 1
+                        }
+
+                        with st.spinner("Logging in..."):
+                            time.sleep(2)
+                        st.success("Signed in")
+
+                        time.sleep(0.5)
+
+                        if st.session_state["user"]["type"] == "Owner":
+                            st.switch_page("pages/ownerDash.py")
+
+                        if st.session_state["user"]["type"] == "Manager":
+                            st.switch_page("pages/managerDash.py")
+
+                        if st.session_state["user"]["type"] == "Salesperson":
+                            st.switch_page("pages/salespersonDash.py")
+
+                        if st.session_state["user"]["type"] == "Technician":
+                            st.switch_page("pages/technicianDash.py")
+
+                        if st.session_state["user"]["type"] == "Trainee":
+                            st.switch_page("pages/traineeDash.py")
             except ValueError:
                 st.error("Please enter a valid ID.")
 
@@ -122,13 +153,13 @@ def main():
         search_button = st.button("Search", disabled=search_disabled)
 
         if search_button and st.session_state.search_input:
-            temp_data = [("1", "1 University Drive", "Orange", "92868", "CA")]
-            cols = ["ID", "Address", "City", "Zip Code", "State"]
+            temp_data = [("1", "1 University Drive", "Orange", "92868", "Orange", "CA")]
+            cols = ["ID", "Address", "City", "Zip Code", "County", "State"]
             results_df = pd.DataFrame(temp_data, columns=cols)
 
             result = results_df[results_df[search_by] == st.session_state.search_input]
             if not result.empty:
-                st.dataframe(result)
+                st.dataframe(result, hide_index=True)
             else:
                 st.warning("No matching dealership found.")
 
